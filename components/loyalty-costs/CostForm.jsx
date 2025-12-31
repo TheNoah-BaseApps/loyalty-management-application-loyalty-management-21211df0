@@ -60,14 +60,76 @@ export default function CostForm({ cost = null, onSuccess }) {
     }
   }, [cost]);
 
+  const validateForm = () => {
+    if (!formData.cost_name.trim()) {
+      toast.error('Cost name is required');
+      return false;
+    }
+    if (!formData.product_id.trim()) {
+      toast.error('Product ID is required');
+      return false;
+    }
+    if (!formData.product_name.trim()) {
+      toast.error('Product name is required');
+      return false;
+    }
+    if (!formData.points_required || parseFloat(formData.points_required) <= 0) {
+      toast.error('Points required must be greater than 0');
+      return false;
+    }
+    if (!formData.monetary_value || parseFloat(formData.monetary_value) <= 0) {
+      toast.error('Monetary value must be greater than 0');
+      return false;
+    }
+    if (!formData.stock_quantity || parseInt(formData.stock_quantity) < 0) {
+      toast.error('Stock quantity must be 0 or greater');
+      return false;
+    }
+    if (!formData.start_date) {
+      toast.error('Start date is required');
+      return false;
+    }
+    if (formData.end_date && new Date(formData.end_date) < new Date(formData.start_date)) {
+      toast.error('End date cannot be before start date');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
       const token = localStorage.getItem('token');
+      
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        setLoading(false);
+        return;
+      }
+
       const url = cost ? `/api/loyalty-costs/${cost.id}` : '/api/loyalty-costs';
       const method = cost ? 'PATCH' : 'POST';
+
+      const payload = {
+        ...formData,
+        points_required: parseFloat(formData.points_required),
+        monetary_value: parseFloat(formData.monetary_value),
+        stock_quantity: parseInt(formData.stock_quantity),
+        processing_fee: parseFloat(formData.processing_fee || 0),
+        minimum_balance: parseFloat(formData.minimum_balance || 0),
+        redemption_limit: formData.redemption_limit ? parseInt(formData.redemption_limit) : null,
+        validity_period: formData.validity_period || null,
+        end_date: formData.end_date || null,
+        partner_code: formData.partner_code || null,
+        terms_conditions: formData.terms_conditions || null
+      };
 
       const response = await fetch(url, {
         method,
@@ -75,18 +137,23 @@ export default function CostForm({ cost = null, onSuccess }) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to save cost');
+        throw new Error(data.error || data.message || `Failed to ${cost ? 'update' : 'create'} cost`);
       }
 
       toast.success(`Cost ${cost ? 'updated' : 'created'} successfully`);
-      onSuccess();
+      
+      if (onSuccess && typeof onSuccess === 'function') {
+        onSuccess();
+      }
     } catch (err) {
-      toast.error(err.message);
+      console.error('Error saving cost:', err);
+      toast.error(err.message || 'An error occurred while saving the cost');
     } finally {
       setLoading(false);
     }
@@ -101,6 +168,7 @@ export default function CostForm({ cost = null, onSuccess }) {
             value={formData.cost_name}
             onChange={(e) => setFormData({ ...formData, cost_name: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -110,6 +178,7 @@ export default function CostForm({ cost = null, onSuccess }) {
             value={formData.product_id}
             onChange={(e) => setFormData({ ...formData, product_id: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -119,6 +188,7 @@ export default function CostForm({ cost = null, onSuccess }) {
             value={formData.product_name}
             onChange={(e) => setFormData({ ...formData, product_name: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -126,9 +196,12 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Label>Points Required *</Label>
           <Input
             type="number"
+            min="0"
+            step="1"
             value={formData.points_required}
             onChange={(e) => setFormData({ ...formData, points_required: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -136,10 +209,12 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Label>Monetary Value *</Label>
           <Input
             type="number"
+            min="0"
             step="0.01"
             value={formData.monetary_value}
             onChange={(e) => setFormData({ ...formData, monetary_value: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -148,6 +223,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Select
             value={formData.cost_type}
             onValueChange={(value) => setFormData({ ...formData, cost_type: value })}
+            disabled={loading}
           >
             <SelectTrigger>
               <SelectValue />
@@ -165,9 +241,12 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Label>Stock Quantity *</Label>
           <Input
             type="number"
+            min="0"
+            step="1"
             value={formData.stock_quantity}
             onChange={(e) => setFormData({ ...formData, stock_quantity: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -175,8 +254,11 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Label>Redemption Limit</Label>
           <Input
             type="number"
+            min="0"
+            step="1"
             value={formData.redemption_limit}
             onChange={(e) => setFormData({ ...formData, redemption_limit: e.target.value })}
+            disabled={loading}
           />
         </div>
 
@@ -187,6 +269,7 @@ export default function CostForm({ cost = null, onSuccess }) {
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
             required
+            disabled={loading}
           />
         </div>
 
@@ -196,6 +279,7 @@ export default function CostForm({ cost = null, onSuccess }) {
             type="date"
             value={formData.end_date}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+            disabled={loading}
           />
         </div>
 
@@ -204,6 +288,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Select
             value={formData.customer_segment}
             onValueChange={(value) => setFormData({ ...formData, customer_segment: value })}
+            disabled={loading}
           >
             <SelectTrigger>
               <SelectValue />
@@ -222,6 +307,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Select
             value={formData.cost_status}
             onValueChange={(value) => setFormData({ ...formData, cost_status: value })}
+            disabled={loading}
           >
             <SelectTrigger>
               <SelectValue />
@@ -238,6 +324,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Select
             value={formData.fulfillment_type}
             onValueChange={(value) => setFormData({ ...formData, fulfillment_type: value })}
+            disabled={loading}
           >
             <SelectTrigger>
               <SelectValue />
@@ -255,6 +342,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           <Input
             value={formData.partner_code}
             onChange={(e) => setFormData({ ...formData, partner_code: e.target.value })}
+            disabled={loading}
           />
         </div>
       </div>
@@ -265,6 +353,7 @@ export default function CostForm({ cost = null, onSuccess }) {
           value={formData.terms_conditions}
           onChange={(e) => setFormData({ ...formData, terms_conditions: e.target.value })}
           rows={3}
+          disabled={loading}
         />
       </div>
 

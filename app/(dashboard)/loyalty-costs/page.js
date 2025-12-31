@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CostForm from '@/components/loyalty-costs/CostForm';
 import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function LoyaltyCostsPage() {
   const [showCostModal, setShowCostModal] = useState(false);
@@ -14,6 +15,11 @@ export default function LoyaltyCostsPage() {
   const handleCostSuccess = () => {
     setShowCostModal(false);
     setRefreshKey(prev => prev + 1);
+    toast.success('Redemption option added successfully');
+  };
+
+  const handleCostError = (error) => {
+    toast.error(error || 'Failed to add redemption option');
   };
 
   return (
@@ -36,7 +42,7 @@ export default function LoyaltyCostsPage() {
           <DialogHeader>
             <DialogTitle>Add Redemption Option</DialogTitle>
           </DialogHeader>
-          <CostForm onSuccess={handleCostSuccess} />
+          <CostForm onSuccess={handleCostSuccess} onError={handleCostError} />
         </DialogContent>
       </Dialog>
     </div>
