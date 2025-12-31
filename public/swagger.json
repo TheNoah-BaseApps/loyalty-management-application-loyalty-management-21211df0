@@ -30,6 +30,261 @@
   },
   "security": [],
   "paths": {
+    "/api/accrual-management/{id}": {
+      "get": {
+        "summary": "Get accrual record by ID",
+        "description": "Retrieve a specific accrual record",
+        "tags": [
+          "Accrual Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accrual record found"
+          },
+          "404": {
+            "description": "Accrual record not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update accrual record",
+        "description": "Update an existing accrual record",
+        "tags": [
+          "Accrual Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Accrual record updated successfully"
+          },
+          "404": {
+            "description": "Accrual record not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete accrual record",
+        "description": "Delete an accrual record",
+        "tags": [
+          "Accrual Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accrual record deleted successfully"
+          },
+          "404": {
+            "description": "Accrual record not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/accrual-management": {
+      "get": {
+        "summary": "Get all accrual records",
+        "description": "Retrieve all accrual management records with pagination",
+        "tags": [
+          "Accrual Management"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Items per page"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by points status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of accrual records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new accrual record",
+        "description": "Create a new accrual management record",
+        "tags": [
+          "Accrual Management"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "accrual_id",
+                  "customer_id",
+                  "customer_name",
+                  "transaction_date",
+                  "transaction_amount",
+                  "points_earned",
+                  "accrual_type",
+                  "points_status"
+                ],
+                "properties": {
+                  "accrual_id": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "customer_name": {
+                    "type": "string"
+                  },
+                  "transaction_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "transaction_amount": {
+                    "type": "number"
+                  },
+                  "points_earned": {
+                    "type": "number"
+                  },
+                  "accrual_type": {
+                    "type": "string"
+                  },
+                  "total_accrued_points": {
+                    "type": "number"
+                  },
+                  "rule_id": {
+                    "type": "string"
+                  },
+                  "points_status": {
+                    "type": "string"
+                  },
+                  "processing_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "channel_source": {
+                    "type": "string"
+                  },
+                  "partner_code": {
+                    "type": "string"
+                  },
+                  "program_type": {
+                    "type": "string"
+                  },
+                  "accrual_notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Accrual record created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/api/analytics/costs": {
       "get": {
         "summary": "Get program cost analytics",
@@ -285,6 +540,256 @@
           },
           "400": {
             "description": "Invalid request data"
+          }
+        }
+      }
+    },
+    "/api/loyalty-campaign-management/{id}": {
+      "get": {
+        "summary": "Get campaign by ID",
+        "description": "Retrieve a specific loyalty campaign",
+        "tags": [
+          "Loyalty Campaign Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign found"
+          },
+          "404": {
+            "description": "Campaign not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update campaign",
+        "description": "Update an existing loyalty campaign",
+        "tags": [
+          "Loyalty Campaign Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Campaign updated successfully"
+          },
+          "404": {
+            "description": "Campaign not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete campaign",
+        "description": "Delete a loyalty campaign",
+        "tags": [
+          "Loyalty Campaign Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign deleted successfully"
+          },
+          "404": {
+            "description": "Campaign not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/loyalty-campaign-management": {
+      "get": {
+        "summary": "Get all loyalty campaigns",
+        "description": "Retrieve all loyalty campaign records with pagination",
+        "tags": [
+          "Loyalty Campaign Management"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Items per page"
+          },
+          {
+            "in": "query",
+            "name": "is_active",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filter by active status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of loyalty campaigns",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new loyalty campaign",
+        "description": "Create a new loyalty campaign record",
+        "tags": [
+          "Loyalty Campaign Management"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "campaign_id",
+                  "campaign_name",
+                  "campaign_type",
+                  "start_date",
+                  "end_date",
+                  "is_active"
+                ],
+                "properties": {
+                  "campaign_id": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "campaign_name": {
+                    "type": "string"
+                  },
+                  "campaign_type": {
+                    "type": "string"
+                  },
+                  "start_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "end_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "target_tiers": {
+                    "type": "string"
+                  },
+                  "bonus_points": {
+                    "type": "number"
+                  },
+                  "minimum_spend": {
+                    "type": "number"
+                  },
+                  "max_rewards": {
+                    "type": "number"
+                  },
+                  "terms_conditions": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  },
+                  "target_audience": {
+                    "type": "string"
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  },
+                  "created_by": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Campaign created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }

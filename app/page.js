@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Gift, TrendingUp, Users, Zap, UserPlus } from 'lucide-react';
+import { Gift, TrendingUp, Users, Zap, UserPlus, Megaphone } from 'lucide-react';
 
 export default function HomePage() {
   const router = useRouter();
@@ -83,6 +83,26 @@ export default function HomePage() {
               <CardTitle>Analytics</CardTitle>
               <CardDescription>
                 Cost analysis, redemption patterns, and ROI metrics
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <TrendingUp className="w-12 h-12 text-teal-600 mb-2" />
+              <CardTitle>Accrual Management</CardTitle>
+              <CardDescription>
+                Track and manage points accrual from customer transactions
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Megaphone className="w-12 h-12 text-pink-600 mb-2" />
+              <CardTitle>Loyalty Campaign Management</CardTitle>
+              <CardDescription>
+                Create and manage marketing campaigns and promotional offers
               </CardDescription>
             </CardHeader>
           </Card>

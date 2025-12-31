@@ -13,6 +13,8 @@ const navigation = [
   { name: 'Point Transactions', href: '/point-transactions', icon: TrendingUp, roles: ['admin', 'manager', 'analyst', 'viewer'] },
   { name: 'Redemptions', href: '/redemptions', icon: Gift, roles: ['admin', 'manager', 'analyst', 'viewer'] },
   { name: 'Campaigns', href: '/campaigns', icon: Megaphone, roles: ['admin', 'manager'] },
+  { name: 'Accrual Management', href: '/accrual-management', icon: TrendingUp, roles: ['admin', 'manager', 'analyst', 'viewer'] },
+  { name: 'Loyalty Campaigns', href: '/loyalty-campaign-management', icon: Megaphone, roles: ['admin', 'manager'] },
   { name: 'Referrals', href: '/referrals', icon: Share2, roles: ['admin', 'manager', 'analyst', 'viewer'] },
   { name: 'Analytics', href: '/analytics', icon: BarChart3, roles: ['admin', 'manager', 'analyst'] },
   { name: 'Tiers', href: '/tiers', icon: Award, roles: ['admin', 'manager'] },
