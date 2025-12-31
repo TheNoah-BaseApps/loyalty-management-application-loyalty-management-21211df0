@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Users, DollarSign, Settings, Gift, TrendingUp, Megaphone, Share2, Award, BarChart3 } from 'lucide-react';
+import { Home, Users, UserPlus, DollarSign, Settings, Gift, TrendingUp, Megaphone, Share2, Award, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home, roles: ['admin', 'manager', 'analyst', 'viewer'] },
   { name: 'Members', href: '/members', icon: Users, roles: ['admin', 'manager', 'analyst', 'viewer'] },
+  { name: 'Member Enrollment', href: '/member-enrollment', icon: UserPlus, roles: ['admin', 'manager'] },
   { name: 'Loyalty Costs', href: '/loyalty-costs', icon: DollarSign, roles: ['admin', 'manager'] },
   { name: 'Loyalty Rules', href: '/loyalty-rules', icon: Settings, roles: ['admin', 'manager'] },
   { name: 'Point Transactions', href: '/point-transactions', icon: TrendingUp, roles: ['admin', 'manager', 'analyst', 'viewer'] },

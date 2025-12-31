@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Gift, TrendingUp, Users, Zap } from 'lucide-react';
+import { Gift, TrendingUp, Users, Zap, UserPlus } from 'lucide-react';
 
 export default function HomePage() {
   const router = useRouter();
@@ -43,6 +43,16 @@ export default function HomePage() {
               <CardTitle>Member Management</CardTitle>
               <CardDescription>
                 Automate enrollment and manage member profiles with ease
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <UserPlus className="w-12 h-12 text-indigo-600 mb-2" />
+              <CardTitle>Member Enrollment</CardTitle>
+              <CardDescription>
+                Automated member registration with profile management and tier assignment
               </CardDescription>
             </CardHeader>
           </Card>

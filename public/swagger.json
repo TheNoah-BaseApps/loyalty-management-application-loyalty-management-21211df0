@@ -425,6 +425,282 @@
         }
       }
     },
+    "/api/member-enrollment/{id}": {
+      "get": {
+        "summary": "Get member enrollment by ID",
+        "description": "Retrieve a specific member enrollment record",
+        "tags": [
+          "Member Enrollment"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Member enrollment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Member enrollment details"
+          },
+          "404": {
+            "description": "Member enrollment not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update member enrollment",
+        "description": "Update a specific member enrollment record",
+        "tags": [
+          "Member Enrollment"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Member enrollment ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Member enrollment updated successfully"
+          },
+          "404": {
+            "description": "Member enrollment not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete member enrollment",
+        "description": "Delete a specific member enrollment record",
+        "tags": [
+          "Member Enrollment"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Member enrollment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Member enrollment deleted successfully"
+          },
+          "404": {
+            "description": "Member enrollment not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/member-enrollment": {
+      "get": {
+        "summary": "Get all member enrollments",
+        "description": "Retrieve a list of all member enrollment records with pagination",
+        "tags": [
+          "Member Enrollment"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            },
+            "description": "Number of records per page"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by enrollment status"
+          },
+          {
+            "in": "query",
+            "name": "membership_type",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by membership type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of member enrollments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new member enrollment",
+        "description": "Create a new member enrollment record",
+        "tags": [
+          "Member Enrollment"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "member_id",
+                  "membership_type",
+                  "member_name",
+                  "member_email",
+                  "enrollment_date",
+                  "status"
+                ],
+                "properties": {
+                  "member_id": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "membership_type": {
+                    "type": "string"
+                  },
+                  "member_name": {
+                    "type": "string"
+                  },
+                  "member_gender": {
+                    "type": "string"
+                  },
+                  "member_age": {
+                    "type": "integer"
+                  },
+                  "member_email": {
+                    "type": "string"
+                  },
+                  "member_phone": {
+                    "type": "string"
+                  },
+                  "member_city": {
+                    "type": "string"
+                  },
+                  "member_state": {
+                    "type": "string"
+                  },
+                  "member_country": {
+                    "type": "string"
+                  },
+                  "enrollment_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "current_tier": {
+                    "type": "string"
+                  },
+                  "total_points": {
+                    "type": "integer"
+                  },
+                  "membership_expiry": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "joining_bonus": {
+                    "type": "integer"
+                  },
+                  "referral_code": {
+                    "type": "string"
+                  },
+                  "terms_accepted": {
+                    "type": "boolean"
+                  },
+                  "communication_preferences": {
+                    "type": "string"
+                  },
+                  "created_by": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Member enrollment created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/api/members/{id}": {
       "get": {
         "summary": "Get member by ID",
